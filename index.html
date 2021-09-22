@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            text-align: center;
+            font-size: 32pt;
+        }
+        
+        .digital-font {
+            font-family: ClockIcons;
+        }
+
+        .clock {
+            font-size: 128pt;
+        }
+
+        .ms {
+            font-size: 48pt;
+        }
+
+        @font-face {
+            font-family: ClockIcons;
+            src: url('/home/oswaldtzh/Documents/clockicons.woff');
+        }
+    </style>
+</head>
+<body>
+    <br><br><br><br>
+    <div class="digital-font">
+        <span id="clock_minutes" class="clock"></span><!--
+        --><span class="clock">:</span><!--
+        --><span id="clock_seconds" class="clock"></span><!--
+        --><span class="ms">.</span><!--
+        --><span id="clock_miliseconds" class="ms"></span><br>
+    </div>
+    <br>
+    <div>
+        <button onclick="start();">Start</button>
+        <button onclick="stop();">Stop</button>
+        <button onclick="reset();">Reset</button>
+    </div>
+    <script>
+        let clock_minutes = document.querySelector('#clock_minutes');
+        let clock_seconds = document.querySelector('#clock_seconds');
+        let clock_miliseconds = document.querySelector('#clock_miliseconds');
+        let timer;
+
+        let wait_minutes = 0;
+        let wait_seconds = 30;
+
+        let minutes = 0;
+        let seconds = 0;
+        let miliseconds = 0;
+
+        seconds -= wait_seconds;
+
+        setClockValues(minutes, seconds, miliseconds);
+
+        function start() {
+            timer = setInterval(() => {
+
+            if (seconds < 0 && miliseconds === 0) {
+                miliseconds -= 100;
+                seconds++;
+            } 
+            if (seconds >= 0 && miliseconds === 99) {
+                miliseconds = -1;
+                seconds++;
+            }
+
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+            }
+
+            miliseconds++;
+
+            setClockValues(minutes, seconds, miliseconds);
+            }, 10);
+        }
+
+        function stop() {
+            clearInterval(timer)
+        }
+
+        function reset() {
+            minutes = 0;
+            seconds = 0;
+            miliseconds = 0;
+
+            seconds -= wait_seconds;
+
+            setClockValues(minutes, seconds, miliseconds);
+        }
+
+        function setClockValues(minutes, seconds, miliseconds) {
+            clock_minutes.innerHTML = String(Math.abs(minutes)).padStart(2,0);
+            clock_seconds.innerHTML = String(Math.abs(seconds)).padStart(2,0);
+            clock_miliseconds.innerHTML = String(Math.abs(miliseconds)).padStart(2,0);
+        }
+    </script>
+</body>
+</html>
